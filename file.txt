@@ -1,0 +1,52 @@
+SYSTEM CALLS UNDERSTANDING
+
+Fork: duplicates the calling process and runs it. The duplicated process is an exact duplicate(same code) except it has it’s unique PID, but the same parent PID as the parent and it has different Memory references.
+             Pid_t fork(void);
+
+Stat: gives Information about a file or filesystem
+        int stat(const char *path, struct stat *buf);
+        struct stat contains the id, protection level, user Id of owner, etc. after calling
+        char path contains the path of the file you want to know stuff about
+
+Kill: terminates a process of given pid
+        int kill(pid_t pid, int sig);
+
+mmap: simulates mainmemory as ram
+        void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+
+chmod: changes the file mode bits (the permission of files) means for example that you can change a writeable file to read only
+        int chmod(const char *path, mode_t mode);
+
+waitpid: waits for a child of the calling process to change it's state. maybe it get's terminated, suspended, ...
+        pid_t waitpid(pid_t pid, int *status, int options);
+
+
+
+
+SYSTEM CALLS FAIL:
+
+Fork: ENOSYS
+        fork is not supported on this platform
+
+Exec: EFAULT
+        filename points outside your accessible address space
+
+Unlink: EBUSY
+        the file cannot be unlinked, because it's getting used by the system or another program
+
+Read: EBADF
+        fd is not a valid file descriptor or is not open for reading.
+
+Mount: ENAMETOOLONG
+        A pathname was longer than MAXPATHLEN.
+
+Chmod: EACCES
+        Search  permission  is denied
+
+Kill: EPERM
+        The  process  does not have permission to send the signal to any of the target processes.
+
+
+TRAP:
+        A trap instruction is used for switching in the kernel mode. the trap instruction has one of the highest priorities.
+        In the Kernel Mode you can access any hardware, address, usw. So that the OS can use those.
